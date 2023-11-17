@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt'
 import { db } from '../connect.js'
 import jwt from 'jsonwebtoken'
-// import dotenv from 'dotenv'
-// dotenv.config()
+import dotenv from 'dotenv'
+dotenv.config()
 
 export const register = (req, res) => {
   // Check user if exists
@@ -46,7 +46,7 @@ export const login = (req, res) => {
     if (!checkPassword)
       return res.status(400).json('Wrong password or username!')
 
-    const token = jwt.sign({ id: data[0].id }, 'secretkey')
+    const token = jwt.sign({ id: data[0].id }, `${process.env.JWT_SECRET}`)
 
     const { password, ...other } = data[0]
     res

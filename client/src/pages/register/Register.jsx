@@ -21,6 +21,7 @@ const handleClick = async e=>{
 
   try{
 await axios.post("http://localhost:8800/api/auth/register", inputs)
+window.location.href = "/login";
   }catch(err) {
 setErr(err.response.data)
   }
