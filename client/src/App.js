@@ -1,5 +1,3 @@
-import React from 'react'
-import Share from './components/share/Share'
 import Login from './pages/login/Login'
 import Register from './pages/register/Register'
 import {
@@ -18,12 +16,12 @@ import { DarkModeContext } from './context/darkModeContext'
 import { AuthContext } from './context/authContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-const queryClient = new QueryClient()
-
 function App () {
   const { currentUser } = useContext(AuthContext)
 
   const { darkMode } = useContext(DarkModeContext)
+
+  const queryClient = new QueryClient()
 
   const Layout = () => {
     return (

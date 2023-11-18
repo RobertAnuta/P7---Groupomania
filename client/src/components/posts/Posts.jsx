@@ -1,35 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Post from '../post/Post.jsx';
 import './posts.scss';
+import { useQuery } from '@tanstack/react-query'
 import { makeRequest } from '../../axios.js';
 
+
 const Posts = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await makeRequest.get('/posts');
-        setData(response.data);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (error) return `An error has occurred: ${error.message}`;
-
+  const { isLoading, error, data } = useQuery(["posts"], () => 
+    makeRequest.get("/posts").then((res) => {
+    return res.data
+    })
+  )
   return (
     <div className="posts">
-      {error ? `An error has occurred: ${error.message}` : (isLoading ? 'Loading...' : data.map((post) => 
-        <Post post={post} key={post.id} />)
-      )}
+     {error 
+     ? ("Something went wrong with the post!" )
+     : isLoading 
+     ? ("loading..." )
+     : data.map(post =>(
+      <Post post={post} key={post.id} />))
+      }
     </div>
   );
 };

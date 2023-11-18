@@ -16,7 +16,7 @@ export const getPosts = (req, res) => {
     const query = `SELECT p.*, u.id AS userId, name, profilePic FROM posts AS p JOIN users AS u ON (u.id = p.userId)
       ORDER BY p.createdAt DESC`
 
-    //   "follow" DB request:  LEFT JOIN relationships AS r ON (p.userId = r.followedUserId) WHERE r.followerUserId=? OR p.userId =?
+    //   "followers" DB request:  LEFT JOIN relationships AS r ON (p.userId = r.followedUserId) WHERE r.followerUserId=? OR p.userId =?
 
     db.query(query, [userInfo.id, userInfo.id], (err, data) => {
       if (err) return res.status(500).json({ error: 'Internal Server Error' })
