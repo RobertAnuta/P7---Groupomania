@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
 import { useContext, useState } from "react";
 import moment from 'moment'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { makeRequest } from '../../axios.js';
 import { AuthContext } from "../../context/authContext.js";
 
@@ -24,7 +24,20 @@ const { isLoading, error, data } = useQuery(["likes", post.id], () =>
     })
   )
 
-console.log(data)
+   const queryClient = useQueryClient()
+
+   const mutation = useMutation((liked) =>{
+    if(liked) return makeRequest.delete("/likes?postId=" + post.id)
+    return makeRequest.post("/likes", {postId: post.id})
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['likes'] )
+    }
+  })
+
+const handleLike = () => {
+mutation.mutate(data.includes(currentUser.id))
+}
 
   return (
     <div className="post">
@@ -50,7 +63,7 @@ console.log(data)
         </div>
         <div className="info">
           <div className="item">
-            {data.includes(currentUser.id) ? <FavoriteOutlinedIcon style={{color: "red"}} /> : <FavoriteBorderOutlinedIcon />}
+            {isLoading ? ("loading...") : data.includes(currentUser.id) ? <FavoriteOutlinedIcon style={{color: "red"}} onClick={handleLike}/> : <FavoriteBorderOutlinedIcon onClick={handleLike}/>}
             {data?.length !== undefined ? `${data.length} Likes` : 'Loading...'}
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>

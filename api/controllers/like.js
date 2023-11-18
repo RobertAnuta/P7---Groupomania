@@ -1,4 +1,5 @@
 import { db } from '../connect.js'
+import jwt from 'jsonwebtoken'
 
 export const getLikes = (req, res) => {
   const query = 'SELECT userId FROM likes WHERE postId = ?'
@@ -16,19 +17,13 @@ export const addLike = (req, res) => {
   jwt.verify(token, `${process.env.JWT_SECRET}`, (err, userInfo) => {
     if (err) return res.status(403).json({ error: 'Token is not valid!' })
 
-    const query =
-      'INSERT INTO comments (`desc`, `createdAt`, `userId`, `postId`) VALUES (?)'
+    const query = 'INSERT INTO likes (`userId`, `postId`) VALUES (?)'
 
-    const values = [
-      req.body.desc,
-      moment(Date.now()).format('YYYY_MM_DD HH:mm:ss'),
-      userInfo.id,
-      req.body.postId
-    ]
+    const values = [userInfo.id, req.body.postId]
 
     db.query(query, [values], (err, data) => {
       if (err) return res.status(500).json({ error: 'Internal Server Error' })
-      return res.status(200).json('Comment has been created!')
+      return res.status(200).json('Post has been liked!')
     })
   })
 }
@@ -40,19 +35,11 @@ export const deleteLike = (req, res) => {
   jwt.verify(token, `${process.env.JWT_SECRET}`, (err, userInfo) => {
     if (err) return res.status(403).json({ error: 'Token is not valid!' })
 
-    const query =
-      'INSERT INTO comments (`desc`, `createdAt`, `userId`, `postId`) VALUES (?)'
+    const query = 'DELETE FROM likes WHERE `userId` = ? AND `postId` = ?'
 
-    const values = [
-      req.body.desc,
-      moment(Date.now()).format('YYYY_MM_DD HH:mm:ss'),
-      userInfo.id,
-      req.body.postId
-    ]
-
-    db.query(query, [values], (err, data) => {
+    db.query(query, [userInfo.id, req.query.postId], (err, data) => {
       if (err) return res.status(500).json({ error: 'Internal Server Error' })
-      return res.status(200).json('Comment has been created!')
+      return res.status(200).json('Like has been removed!')
     })
   })
 }
