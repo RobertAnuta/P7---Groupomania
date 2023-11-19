@@ -40,9 +40,9 @@ setDesc("")
         <button onClick={handleClick}>Send</button>
       </div>
       {isLoading 
-      ? "loading..." 
+      ? ("loading...")
       : data.map((comment) => (
-        <div className="comment">
+        <div key={comment.id} className="comment">
           <img src={comment.profilePic} alt="Profile Avatar Picture" />
           <div className="info">
             <span>{comment.name}</span>

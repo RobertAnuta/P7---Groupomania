@@ -1,11 +1,16 @@
-# Getting Started with Create React App
 
-## Available Scripts
 
 In the \api directory, run:
 
 ### `yarn start`
 
-The app is running on with nodemon
+In the \client directory, run:
+
+### `yarn start`
+
+Frontend is running on: 
+[http://localhost:3000]
+
+The API is running on with nodemon
 [http://localhost:8800]
 

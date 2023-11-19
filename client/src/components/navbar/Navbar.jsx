@@ -1,42 +1,50 @@
 import "./navbar.scss";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { Link } from "react-router-dom";
+import iconImage from '../../assets/icon-left-font-monochrome-black.png';
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/authContext";
 
 const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, logout } = useContext(AuthContext);
+
+    const navigate = useNavigate()
+
+ const handleLogout = () => {
+  logout();
+  navigate("/login"); 
+};
+
+const handleProfile = () => {
+  navigate("/profile/" + currentUser.id); 
+
+}
 
   return (
     <div className="navbar">
       <div className="left">
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <span>Groupomania</span>
+        <Link>
+          <img className="logo" src={iconImage} alt="logo" to="/"/>
         </Link>
         {darkMode ? (
           <WbSunnyOutlinedIcon onClick={toggle} />
         ) : (
           <DarkModeOutlinedIcon onClick={toggle} />
         )}
-        <div className="search">
-          <SearchOutlinedIcon />
-          <input type="text" placeholder="Search..." />
-        </div>
       </div>
       <div className="right">
-        <PersonOutlinedIcon />
-        <div className="user">
+        <div className="user" onClick={handleProfile}>
           <img
             src={currentUser.profilePic}
-            alt=""
+            alt="profile picture"
           />
           <span>{currentUser.name}</span>
         </div>
+        <button onClick={handleLogout}>Logout</button>
+
       </div>
     </div>
   );
