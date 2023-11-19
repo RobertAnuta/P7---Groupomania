@@ -16,6 +16,10 @@ export const register = (req, res) => {
     const salt = bcrypt.genSaltSync()
     const hashedPassword = bcrypt.hashSync(req.body.password, salt)
 
+    const defaultProfilePicPath = './api/profilePic/defaultPicture.jpg'
+
+    const defaultProfilePic = fs.readFileSync(defaultProfilePicPath)
+
     const insertQuery =
       'INSERT INTO users (`username`, `email`, `password`, `name`) VALUES (?, ?, ?, ?)'
     const values = [
@@ -24,7 +28,6 @@ export const register = (req, res) => {
       hashedPassword,
       req.body.name
     ]
-
     db.query(insertQuery, values, (err, data) => {
       if (err) return res.status(500).json(err)
       return res.status(200).json('User has been created')
