@@ -33,7 +33,10 @@
         font-size: 20px;
         color: themed("logo");
       }
+      .MuiSvgIcon-root {
+        cursor: pointer;
 
+      }
     }
 
     .right {
@@ -54,6 +57,7 @@
         align-items: center;
         gap: 10px;
         font-weight: 500;
+        cursor: pointer;
 
         img {
           width: 30px;
