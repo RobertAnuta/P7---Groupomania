@@ -3,6 +3,7 @@ import { db } from '../connect.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 dotenv.config()
+import fs from 'fs'
 
 export const register = (req, res) => {
   // Check user if exists
@@ -16,9 +17,9 @@ export const register = (req, res) => {
     const salt = bcrypt.genSaltSync()
     const hashedPassword = bcrypt.hashSync(req.body.password, salt)
 
-    const defaultProfilePicPath = './api/profilePic/defaultPicture.jpg'
+    // const defaultProfilePicPath = '../profilePic/defaultPicture.jpg'
 
-    const defaultProfilePic = fs.readFileSync(defaultProfilePicPath)
+    // const defaultProfilePic = fs.readFileSync(defaultProfilePicPath)
 
     const insertQuery =
       'INSERT INTO users (`username`, `email`, `password`, `name`) VALUES (?, ?, ?, ?)'
