@@ -118,6 +118,15 @@
           align-items: center;
           justify-content: flex-end;
           gap: 10px;
+
+          button {
+        border: none;
+        padding: 5px;
+        color: white;
+        cursor: pointer;
+        background-color: #5271ff;
+        border-radius: 3px;
+      }
         }
       }
     }

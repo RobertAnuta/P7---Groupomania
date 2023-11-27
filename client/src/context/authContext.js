@@ -1,3 +1,5 @@
+// authContext.js
+
 import axios from 'axios'
 import { createContext, useEffect, useState } from 'react'
 
@@ -34,12 +36,21 @@ export const AuthContextProvider = ({ children }) => {
     }
   }
 
+  const deleteUser = async userId => {
+    try {
+      await axios.delete(`http://localhost:8800/api/auth/delete/${userId}`)
+      setCurrentUser(null)
+    } catch (error) {
+      console.error('Delete user failed:', error)
+    }
+  }
+
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(currentUser))
   }, [currentUser])
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout }}>
+    <AuthContext.Provider value={{ currentUser, login, logout, deleteUser }}>
       {children}
     </AuthContext.Provider>
   )

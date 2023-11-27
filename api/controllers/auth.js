@@ -71,3 +71,26 @@ export const logout = (req, res) => {
     .status(200)
     .json('You have been logged out')
 }
+
+export const deleteUser = async (req, res) => {
+  const userId = req.params.id
+
+  const query = `SELECT * FROM users WHERE id = ${userId}`
+  try {
+    const user = await db.query(query)
+    if (user.length === 0) {
+      return res.status(404).json('User not found')
+    }
+  } catch (err) {
+    return res.status(500).json(err)
+  }
+
+  // Delete user
+  const deleteQuery = `DELETE FROM users WHERE id = ${userId}`
+  try {
+    await db.query(deleteQuery)
+    return res.status(200).json('User deleted successfully')
+  } catch (err) {
+    return res.status(500).json(err)
+  }
+}

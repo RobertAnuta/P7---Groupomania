@@ -9,10 +9,27 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
 import { useQuery } from '@tanstack/react-query'
 import { makeRequest } from '../../axios.js';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+import { useContext } from "react";
 
 
 const Profile = () => {
+  const { deleteUser, currentUser  } = useContext(AuthContext);
+  const navigate = useNavigate()
+
+ const handleDeleteUser = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete your account?");
+  
+    if (confirmDelete) {
+      try {
+        await deleteUser(currentUser.id); 
+        navigate("/login");
+      } catch (error) {
+        console.error('Failed to delete user:', error);
+      }
+    }
+  };
 
 const userId = useLocation().pathname.split("/")[2]
 
@@ -23,19 +40,18 @@ const { isLoading, error, data } = useQuery(["user"], () =>
   )
 
 const userData = data || {};
-console.log(userData.name)
 
   return (
     <div className="profile">
       <div className="images">
         <img
           src={userData.coverPic}
-          alt=""
+          alt="Cover Picture"
           className="cover"
         />
         <img
           src={userData.profilePic }
-          alt=""
+          alt="Profile Picture"
           className="profilePic"
         />
       </div>
@@ -64,6 +80,7 @@ console.log(userData.name)
             </div>
           </div>
           <div className="right">
+            <button onClick={handleDeleteUser}>Delete Account</button>
             <EmailOutlinedIcon />
             <MoreVertIcon />
           </div>
